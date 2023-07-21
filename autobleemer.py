@@ -29,6 +29,7 @@ def update_status(status_text):
 
 
 def run_cdrecord(scsi_id, speed):
+    """this is just a full port of the bash commands using subprocess."""
     cdrecord = os.path.join(tools, "cdrecord")
     mkisofs = os.path.join(tools, "mkisofs")
     ippatch = os.path.join(tools, "ippatch")
