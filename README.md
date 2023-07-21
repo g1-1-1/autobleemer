@@ -43,3 +43,11 @@ after this, navigate to the folder root and run `python autobleemer.py`. the pro
 you'll see a success message:
 
 (screenshot here)
+
+## thanks
+OVERRIDE (for the original bleemcast selfboot bash script)
+burner0 (for ippatch.exe)
+Jorg Schilling and others (for cdrtools)
+Andreas Mueller and others (for cdrdao)
+Mariposa (for cdrdao interface `XDuplicator`)
+SMiTH (for updating the bleemcast selfboot script and methods, and the version of the bash script this python script is based on)
