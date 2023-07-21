@@ -1,0 +1,5 @@
+CDB:  00 00 00 00 00 00
+Sense Bytes: 70 00 02 00 00 00 00 0A 00 00 00 00 3A 02
+Sense Key: 0x2 Not Ready, Segment 0
+Sense Code: 0x3A Qual 0x02 (medium not present - tray open) Fru 0x0
+Sense flags: Blk 0 (not valid) 
