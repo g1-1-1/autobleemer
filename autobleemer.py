@@ -1,8 +1,12 @@
 import subprocess
 import ctypes
 import os
+import tkinter as tk
+from tkinter import messagebox
 
+# globals
 tools = os.path.join(os.getcwd(), "tools")
+root = tk.Tk()
 
 
 def is_admin():
@@ -11,6 +15,13 @@ def is_admin():
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
         return False
+
+
+def update_status(status_text):
+    '''update top-left status box.'''
+    global status_label  # use the global status_label
+    status_label.config(text=status_text)
+    root.update_idletasks()
 
 
 def run_cdrecord(scsi_id, speed):
@@ -25,7 +36,7 @@ def run_cdrecord(scsi_id, speed):
     with open("msinfo.txt", "w") as f:
         subprocess.run([cdrecord, f"-dev={scsi_id}", "-msinfo"], stdout=f)
 
-    print("Creating data.iso with mkisofs...")
+    update_status("creating data.iso with mkisofs...")
     mkisofs_process = subprocess.run(
         [mkisofs, "-C", "@msinfo.txt", "-V", "BLEEM!", "-l", "-o", data_iso, data_path],
         stdout=subprocess.PIPE,
@@ -36,14 +47,15 @@ def run_cdrecord(scsi_id, speed):
         error_phrase in mkisofs_process.stderr
         for error_phrase in ["No such file or directory", "Invalid node", "Malformed"]
     ):
+        update_status("mkisofs error: " + mkisofs_process.stderr)
         raise RuntimeError("mkisofs error: " + mkisofs_process.stderr)
     else:
-        print("mkisofs completed.")
+        update_status("mkisofs completed.")
 
     os.remove("msinfo.txt")
-    print("msinfo deleted.")
+    update_status("msinfo deleted.")
 
-    print("patching data.iso with ippatch...")
+    update_status("patching data.iso with ippatch...")
     ippatch_process = subprocess.run(
         [ippatch, data_iso, ip_bin],
         stdout=subprocess.PIPE,
@@ -54,17 +66,29 @@ def run_cdrecord(scsi_id, speed):
         error_phrase in ippatch_process.stderr
         for error_phrase in ["No such file or directory", "can't open"]
     ):
+        update_status("ippatch error: " + ippatch_process.stderr)
         raise RuntimeError("ippatch error: " + ippatch_process.stderr)
     else:
-        print("ippatch completed.")
+        update_status("ippatch completed.")
 
-    subprocess.run([cdrecord, f"-dev={scsi_id}", "-xa1", f"speed={speed}", data_iso])
-    print("data.iso burn completed.")
+    cdrecord_process = subprocess.run(
+        [cdrecord, f"-dev={scsi_id}", "-xa1", f"speed={speed}", data_iso, "-eject"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if any(
+        error_phrase in cdrecord_process.stderr
+        for error_phrase in ["No such file or directory", "can't open"]
+    ):
+        update_status("cdrecord error: " + cdrecord_process.stderr)
+        raise RuntimeError("cdrecord error: " + cdrecord_process.stderr)
+    else:
+        update_status("data.iso burn completed.")
+        update_status("ejected disc from drive.")
 
-    subprocess.run([cdrecord, f"-dev={scsi_id}", "-eject"])
-    print("ejected disc from drive.")
     os.remove(data_iso)
-    print("data.iso deleted.")
+    update_status("data.iso deleted.")
 
 
 def get_first_cd_drive():
@@ -84,26 +108,55 @@ def get_first_cd_drive():
 
 
 def main():
+    global status_label
+
     if not is_admin():
         # the user should be running this as admin
-        print(
-            "insufficient privileges! this script needs to be ran as an administrator.",
+        messagebox.showerror(
+            "insufficient privileges",
+            "this program needs to be run as an administrator.",
         )
         return
+
+    # create the main window
+    root.title("autobleemer")
+
+    # define the GUI elements
+    status_label = tk.Label(root, text="initialising", padx=10, pady=10)
+    status_label.pack()
 
     # get the first CD drive available
     scsi_id = get_first_cd_drive()
     if scsi_id is None:
-        print("error!\n", "no CD drive found.")
+        messagebox.showerror("error!", "no CD drive found.")
+        root.destroy()
         return
 
     speed = "10"  # refactor out of existence
 
-    # run the CD recording process
-    run_cdrecord(scsi_id, speed)
+    # tell the user to wait for everything to finish
+    messagebox.showinfo(
+        "starting to autobleem...",
+        "please wait for everything to finish! do not close any windows without a prompt.",
+    )
 
-    # print completion
-    print("successfully bleemed!\nyou're all done! happy bleem!castin'..")
+    try:
+        # run the CD recording process
+        run_cdrecord(scsi_id, speed)
+
+        # display completion message
+        messagebox.showinfo(
+            "successfully bleemed!", "you're all done! happy bleem!castin'.."
+        )
+    except Exception as e:
+        messagebox.showerror(
+            "error!",
+            f"something happened...\n\n{str(e)}\nif you believe this is in error, report it on github.",
+        )
+
+    # close the main window
+    root.destroy()
+    root.mainloop()
 
 
 if __name__ == "__main__":
