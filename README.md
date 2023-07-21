@@ -4,7 +4,7 @@ binds bleem to a burned cd-r automagically
 ## how do i use?
 clone this repo (use the code dropdown and click `download ZIP` or with `git clone`)
 
-go to the ASPI folder
+go to the `ASPI` folder
 
 click on the `1` folder
 
