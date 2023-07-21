@@ -25,7 +25,7 @@ def run_cdrecord(scsi_id, speed):
     with open("msinfo.txt", "w") as f:
         subprocess.run([cdrecord, f"-dev={scsi_id}", "-msinfo"], stdout=f)
 
-    print("creating data.iso with mkisofs...")
+    print("Creating data.iso with mkisofs...")
     mkisofs_process = subprocess.run(
         [mkisofs, "-C", "@msinfo.txt", "-V", "BLEEM!", "-l", "-o", data_iso, data_path],
         stdout=subprocess.PIPE,
@@ -62,7 +62,7 @@ def run_cdrecord(scsi_id, speed):
     print("ippatch completed.")
 
     subprocess.run([cdrecord, f"-dev={scsi_id}", "-eject"])
-    os.remove("data.iso")
+    os.remove(data_iso)
     print("data.iso deleted.")
 
 
