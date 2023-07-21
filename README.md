@@ -2,7 +2,7 @@
 binds bleem to a burned cd-r automagically
 
 ## how to use
-1. [download the zip file posted in the releases section](https://github.com/g1-1-1/autobleemer/releases), if you do this, ignore the other 2 steps 
+1. [download the zip file posted in the releases section](https://github.com/g1-1-1/autobleemer/releases), if you do this, ignore the next 2 steps and go straight to step 4.
 2. clone this repo (use the code dropdown and click `download ZIP` or with `git clone` using [git](https://git-scm.com/))
 3. [install python and add to PATH](https://www.python.org/downloads/)
 4. go to the `ASPI` folder
