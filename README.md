@@ -2,7 +2,7 @@
 binds bleem to a burned cd-r automagically
 
 ## how to use
-1. [download the zip file posted in the releases section](https://github.com/g1-1-1/autobleemer/releases), if you do this, ignore the next 2 steps and go straight to step 4.
+1. [download the zip file named `autobleemer` posted in the releases section](https://github.com/g1-1-1/autobleemer/releases), if you do this, ignore the next 2 steps and go straight to step 4.
 2. clone this repo (use the code dropdown and click `download ZIP` or with `git clone` using [git](https://git-scm.com/))
 3. [install python and add to PATH](https://www.python.org/downloads/)
 4. go to the `ASPI` folder
@@ -29,7 +29,11 @@ FILE "Clock Tower - The First Fear (Track 1).bin" BINARY
 you can edit this in notepad.
 
 10. write this `.cue` file to your disc, then after successful competion, exit the program.
-11. after this, navigate to the folder root and run `python autobleemer.py`. the program will tell you if anything fails, but if nothing does; you'll see the program do it's thing. a successful bleem is noted with `"successfully bleemed!you're all done! happy bleem!castin'.."`
+11. after this, navigate to the folder root and run `autobleemer.exe` or `python autobleemer.py` (if you cloned from source). the program will tell you if anything fails, but if nothing does; you'll see the program do it's thing. here is an example of a successful run using autobleemer:
+
+
+https://github.com/g1-1-1/autobleemer/assets/24374615/b15a15b5-15bc-40f3-ace8-7350586daabd
+
 
 ## why use this instead of the original bash script?
 in the original scripts, you had to use a separate bash script to find what drive to use, and then edit the main script with that. in this python script, we do that all of that for you.
