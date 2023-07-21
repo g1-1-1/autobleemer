@@ -59,9 +59,10 @@ def run_cdrecord(scsi_id, speed):
         print("ippatch completed.")
 
     subprocess.run([cdrecord, f"-dev={scsi_id}", "-xa1", f"speed={speed}", data_iso])
-    print("ippatch completed.")
+    print("data.iso burn completed.")
 
     subprocess.run([cdrecord, f"-dev={scsi_id}", "-eject"])
+    print("ejected disc from drive.")
     os.remove(data_iso)
     print("data.iso deleted.")
 
