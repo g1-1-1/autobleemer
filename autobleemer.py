@@ -25,7 +25,7 @@ def run_cdrecord(scsi_id, speed):
     with open("msinfo.txt", "w") as f:
         subprocess.run([cdrecord, f"-dev={scsi_id}", "-msinfo"], stdout=f)
 
-    print("Creating data.iso with mkisofs...")
+    print("creating data.iso with mkisofs...")
     mkisofs_process = subprocess.run(
         [mkisofs, "-C", "@msinfo.txt", "-V", "BLEEM!", "-l", "-o", data_iso, data_path],
         stdout=subprocess.PIPE,
