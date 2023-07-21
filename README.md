@@ -30,6 +30,13 @@ you can edit this in notepad.
 9. write this `.cue` file to your disc, then after successful competion, exit the program.
 10. after this, navigate to the folder root and run `python autobleemer.py`. the program will tell you if anything fails, but if nothing does; you'll see the program do it's thing. a successful bleem is noted with `"successfully bleemed!you're all done! happy bleem!castin'.."`
 
+## why use this instead of the original bash script?
+in the original scripts, you had to use a separate bash script to find what drive to use, and then edit the main script with that. in this python script, we do that all of that for you.
+
+really, the thing that takes up the most amount of steps/manual time is the initial dll tomfoolery. if there was a way to avoid that altogether, then that + this script would be the ideal way to do things.. but for now, this is the fastest/most reliable way to create bleemed games.
+
+eventually, there will be support for automatically making cdi files... we'll see.
+
 ## thanks
 - OVERRIDE (for the original bleemcast selfboot bash script)
 - burner0 (for ippatch.exe)
