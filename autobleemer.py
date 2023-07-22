@@ -5,13 +5,14 @@ import tkinter as tk
 from tkinter import messagebox
 
 # globals
-tools = os.path.join(os.getcwd(), "tools")
-root = tk.Tk()
+tools: str = os.path.join(os.getcwd(), "tools")
+root: tk.Tk = tk.Tk()
 root.iconbitmap("assets/icon.ico")
-debug = False
+debug: bool = False
+status_label: tk.Label  # type hint for the status_label
 
 
-def is_admin():
+def is_admin() -> bool:
     """are we running as administrator?"""
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
@@ -19,7 +20,7 @@ def is_admin():
         return False
 
 
-def update_status(status_text):
+def update_status(status_text: str) -> None:
     """update top-left status box."""
     global status_label  # use the global status_label
     status_label.config(text=status_text)
@@ -28,15 +29,15 @@ def update_status(status_text):
         print(status_text)
 
 
-def run_cdrecord(scsi_id, speed):
+def run_cdrecord(scsi_id: str, speed: str) -> None:
     """this is just a full port of the bash commands using subprocess."""
-    cdrecord = os.path.join(tools, "cdrecord")
-    mkisofs = os.path.join(tools, "mkisofs")
-    ippatch = os.path.join(tools, "ippatch")
-    data_iso = os.path.join(tools, "data.iso")
-    data_path = os.path.join(tools, "data/")
-    ip_bin = os.path.join(tools, "IP.BIN")
-    msinfo = os.path.join(tools, "msinfo.txt")
+    cdrecord: str = os.path.join(tools, "cdrecord")
+    mkisofs: str = os.path.join(tools, "mkisofs")
+    ippatch: str = os.path.join(tools, "ippatch")
+    data_iso: str = os.path.join(tools, "data.iso")
+    data_path: str = os.path.join(tools, "data/")
+    ip_bin: str = os.path.join(tools, "IP.BIN")
+    msinfo: str = os.path.join(tools, "msinfo.txt")
 
     with open(msinfo, "w") as f:
         subprocess.run([cdrecord, f"-dev={scsi_id}", "-msinfo"], stdout=f)
@@ -151,23 +152,23 @@ def run_cdrecord(scsi_id, speed):
     update_status("data.iso deleted.")
 
 
-def get_first_cd_drive():
+def get_first_cd_drive() -> str:
     """acquire the first drive in sequence by parsing the output of cdrecord"""
     try:
-        cdrecord_path = os.path.join(tools, "cdrecord")
-        output = subprocess.check_output(
+        cdrecord_path: str = os.path.join(tools, "cdrecord")
+        output: str = subprocess.check_output(
             [cdrecord_path, "-scanbus"], universal_newlines=True
         )
-        lines = output.split("\n")
+        lines: List[str] = output.split("\n")
         for line in lines:
             if "CD-ROM" in line:
-                scsi_id = line.split()[0]
+                scsi_id: str = line.split()[0]
                 return scsi_id
     except subprocess.CalledProcessError:
         return None
 
 
-def main():
+def main() -> None:
     global status_label
 
     if not is_admin():
@@ -192,13 +193,13 @@ def main():
     )
 
     # get the first CD drive available
-    scsi_id = get_first_cd_drive()
+    scsi_id: str = get_first_cd_drive()
     if scsi_id is None:
         messagebox.showerror("error!", "no CD drive found.")
         root.destroy()
         return
 
-    speed = "10"  # refactor out of existence
+    speed: str = "10"  # refactor out of existence
 
     try:
         # run the CD recording process
